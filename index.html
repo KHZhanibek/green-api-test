@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GREEN-API — тестовая страница</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f5f5f5;
+      color: #333;
+    }
+
+    .page {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 24px 16px 40px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 24px;
+      color: #2e7d32;
+    }
+
+    .subtitle {
+      margin: 0 0 24px;
+      color: #666;
+      font-size: 14px;
+    }
+
+    .panel {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .panel h2 {
+      margin: 0 0 12px;
+      font-size: 16px;
+      border-bottom: 1px solid #e0e0e0;
+      padding-bottom: 8px;
+    }
+
+    .field-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .field-row:last-child {
+      margin-bottom: 0;
+    }
+
+    label {
+      min-width: 160px;
+      font-size: 14px;
+    }
+
+    input[type="text"],
+    input[type="url"],
+    textarea {
+      flex: 1;
+      min-width: 220px;
+      padding: 8px 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+      font-family: inherit;
+    }
+
+    textarea#response {
+      width: 100%;
+      min-height: 220px;
+      resize: vertical;
+      font-family: Consolas, Monaco, monospace;
+      font-size: 13px;
+      background: #fafafa;
+    }
+
+    .hint {
+      font-size: 12px;
+      color: #777;
+      margin-top: 4px;
+    }
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    button {
+      border: none;
+      border-radius: 6px;
+      padding: 10px 18px;
+      font-size: 14px;
+      cursor: pointer;
+      background: #43a047;
+      color: #fff;
+      transition: background 0.2s;
+    }
+
+    button:hover {
+      background: #2e7d32;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
+
+    .section-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    a {
+      color: #2e7d32;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <h1>GREEN-API</h1>
+    <p class="subtitle">
+      Тестовая HTML-страница для вызова методов API.
+      <a href="https://green-api.com.kz/docs/" target="_blank" rel="noopener noreferrer">Документация</a>
+    </p>
+
+    <section class="panel">
+      <h2>Параметры подключения к инстансу</h2>
+      <div class="section-grid">
+        <div class="field-row">
+          <label for="apiUrl">apiUrl</label>
+          <input id="apiUrl" type="url" value="https://api.green-api.com" autocomplete="off">
+        </div>
+        <div class="field-row">
+          <label for="idInstance">idInstance</label>
+          <input id="idInstance" type="text" placeholder="1101000001" autocomplete="off">
+        </div>
+        <div class="field-row">
+          <label for="apiTokenInstance">ApiTokenInstance</label>
+          <input id="apiTokenInstance" type="text" placeholder="токен из личного кабинета" autocomplete="off">
+        </div>
+      </div>
+      <p class="hint">Значения берутся в <a href="https://console.green-api.com/" target="_blank" rel="noopener noreferrer">личном кабинете</a> после создания и авторизации инстанса (QR-код).</p>
+    </section>
+
+    <section class="panel">
+      <h2>Методы аккаунта</h2>
+      <div class="buttons">
+        <button type="button" id="btnGetSettings">getSettings</button>
+        <button type="button" id="btnGetStateInstance">getStateInstance</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>sendMessage</h2>
+      <div class="section-grid">
+        <div class="field-row">
+          <label for="chatIdMessage">chatId</label>
+          <input id="chatIdMessage" type="text" placeholder="79991234567@c.us">
+        </div>
+        <div class="field-row">
+          <label for="messageText">message</label>
+          <input id="messageText" type="text" placeholder="Текст сообщения">
+        </div>
+      </div>
+      <p class="hint">Для личного чата: номер в международном формате + суффикс @c.us (например, 79991234567@c.us).</p>
+      <div class="buttons">
+        <button type="button" id="btnSendMessage">sendMessage</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>sendFileByUrl</h2>
+      <div class="section-grid">
+        <div class="field-row">
+          <label for="chatIdFile">chatId</label>
+          <input id="chatIdFile" type="text" placeholder="79991234567@c.us">
+        </div>
+        <div class="field-row">
+          <label for="urlFile">urlFile</label>
+          <input id="urlFile" type="url" placeholder="https://example.com/image.png">
+        </div>
+        <div class="field-row">
+          <label for="fileName">fileName</label>
+          <input id="fileName" type="text" placeholder="image.png">
+        </div>
+        <div class="field-row">
+          <label for="caption">caption</label>
+          <input id="caption" type="text" placeholder="Подпись к файлу (необязательно)">
+        </div>
+      </div>
+      <div class="buttons">
+        <button type="button" id="btnSendFileByUrl">sendFileByUrl</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Ответ методов</h2>
+      <textarea id="response" readonly placeholder="Здесь будет отображаться ответ API…"></textarea>
+    </section>
+  </div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+
+    function getCredentials() {
+      const apiUrl = $("apiUrl").value.trim().replace(/\/$/, "");
+      const idInstance = $("idInstance").value.trim();
+      const apiTokenInstance = $("apiTokenInstance").value.trim();
+
+      if (!apiUrl || !idInstance || !apiTokenInstance) {
+        throw new Error("Заполните apiUrl, idInstance и ApiTokenInstance.");
+      }
+
+      return { apiUrl, idInstance, apiTokenInstance };
+    }
+
+    function buildUrl(method) {
+      const { apiUrl, idInstance, apiTokenInstance } = getCredentials();
+      return `${apiUrl}/waInstance${idInstance}/${method}/${apiTokenInstance}`;
+    }
+
+    function showResponse(payload) {
+      const text = typeof payload === "string"
+        ? payload
+        : JSON.stringify(payload, null, 2);
+      $("response").value = text;
+    }
+
+    function showError(error) {
+      const message = error instanceof Error ? error.message : String(error);
+      showResponse({ error: message });
+    }
+
+    async function callApi(method, options = {}) {
+      const url = buildUrl(method);
+      const response = await fetch(url, {
+        method: options.method || "GET",
+        headers: options.body ? { "Content-Type": "application/json" } : {},
+        body: options.body ? JSON.stringify(options.body) : undefined,
+      });
+
+      const raw = await response.text();
+      let data;
+
+      try {
+        data = raw ? JSON.parse(raw) : {};
+      } catch {
+        data = { status: response.status, body: raw };
+      }
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${JSON.stringify(data)}`);
+      }
+
+      return data;
+    }
+
+    function setLoading(button, loading) {
+      button.disabled = loading;
+    }
+
+    async function runAction(button, action) {
+      setLoading(button, true);
+      try {
+        const result = await action();
+        showResponse(result);
+      } catch (error) {
+        showError(error);
+      } finally {
+        setLoading(button, false);
+      }
+    }
+
+    $("btnGetSettings").addEventListener("click", () => {
+      runAction($("btnGetSettings"), () => callApi("getSettings"));
+    });
+
+    $("btnGetStateInstance").addEventListener("click", () => {
+      runAction($("btnGetStateInstance"), () => callApi("getStateInstance"));
+    });
+
+    $("btnSendMessage").addEventListener("click", () => {
+      runAction($("btnSendMessage"), () => {
+        const chatId = $("chatIdMessage").value.trim();
+        const message = $("messageText").value.trim();
+
+        if (!chatId || !message) {
+          throw new Error("Для sendMessage укажите chatId и message.");
+        }
+
+        return callApi("sendMessage", {
+          method: "POST",
+          body: { chatId, message },
+        });
+      });
+    });
+
+    $("btnSendFileByUrl").addEventListener("click", () => {
+      runAction($("btnSendFileByUrl"), () => {
+        const chatId = $("chatIdFile").value.trim();
+        const urlFile = $("urlFile").value.trim();
+        const fileName = $("fileName").value.trim();
+        const caption = $("caption").value.trim();
+
+        if (!chatId || !urlFile || !fileName) {
+          throw new Error("Для sendFileByUrl укажите chatId, urlFile и fileName.");
+        }
+
+        const body = { chatId, urlFile, fileName };
+        if (caption) {
+          body.caption = caption;
+        }
+
+        return callApi("sendFileByUrl", {
+          method: "POST",
+          body,
+        });
+      });
+    });
+  </script>
+</body>
+</html>
